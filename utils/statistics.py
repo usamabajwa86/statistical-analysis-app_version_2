@@ -3,6 +3,7 @@ import scipy.stats as stats
 from statsmodels.formula.api import ols
 import statsmodels.api as sm
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
+from statsmodels.multivariate.manova import MANOVA
 
 # ---------- T-Test ----------
 def run_ttest(df, col1, col2):
@@ -41,3 +42,30 @@ def run_anova(df, response, factor):
     """
     anova_table, tukey = one_way_anova(df, response, factor)
     return anova_table
+
+# ---------- MANOVA ----------
+def run_manova(df, dependent_vars, factor):
+    """
+    Runs Multivariate Analysis of Variance (MANOVA) with multiple dependent variables.
+
+    Parameters:
+    - df: DataFrame containing the data
+    - dependent_vars: List of column names for dependent variables
+    - factor: Column name for the grouping factor
+
+    Returns:
+    - MANOVA results object
+    """
+    # Create formula: "dep_var1 + dep_var2 + ... ~ C(factor)"
+    dep_formula = " + ".join(dependent_vars)
+    formula = f"{dep_formula} ~ C({factor})"
+
+    # Drop rows with missing values in relevant columns
+    cols_needed = dependent_vars + [factor]
+    df_clean = df[cols_needed].dropna()
+
+    # Run MANOVA
+    manova = MANOVA.from_formula(formula, data=df_clean)
+    result = manova.mv_test()
+
+    return result
