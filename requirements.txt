@@ -13,3 +13,14 @@ fpdf
 PyPDF2
 python-docx
 missingno
+
+# Machine Learning & Predictive Modeling
+xgboost
+lightgbm
+prophet
+
+# Clustering & Dimensionality Reduction
+umap-learn
+
+# Model Explainability
+shap
