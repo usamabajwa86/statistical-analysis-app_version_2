@@ -14,7 +14,8 @@ else:
     st.markdown("## PCA")
     cols = st.multiselect("Select numeric columns for PCA", df.select_dtypes(include="number").columns)
 
-    n_comp = st.slider("Number of PCA components", 2, min(len(cols), 5) if cols else 2, 2)
+    max_comp = max(min(len(cols), 5), 2) if cols else 2
+    n_comp = st.slider("Number of PCA components", 1, max_comp, min(2, max_comp))
 
     if st.button("Run PCA"):
         if len(cols) < 2:

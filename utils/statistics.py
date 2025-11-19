@@ -21,3 +21,23 @@ def chi_square_test(df, col1, col2):
     contingency = pd.crosstab(df[col1], df[col2])
     stat, p, dof, expected = stats.chi2_contingency(contingency)
     return stat, p, dof, expected
+
+# ---------- Linear Regression ----------
+def run_linear_regression(df, col_y, col_x):
+    """
+    Runs OLS linear regression with col_y as dependent variable
+    and col_x (list) as independent variables.
+    """
+    X = df[col_x].dropna()
+    y = df[col_y].loc[X.index]
+    X = sm.add_constant(X)
+    model = sm.OLS(y, X).fit()
+    return model
+
+# ---------- ANOVA ----------
+def run_anova(df, response, factor):
+    """
+    Runs one-way ANOVA using the specified response and factor columns.
+    """
+    anova_table, tukey = one_way_anova(df, response, factor)
+    return anova_table
